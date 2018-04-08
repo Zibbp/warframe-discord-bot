@@ -37,7 +37,7 @@ client.on("message", async message => {
     description: "Help and information about the warframe bot.",
     fields: [{
         name: "Commands",
-        value: "Currently we only have +time and +alert"
+        value: "Currently we only have +time, +alert, and +void"
       },
       {
         name: "Development",
@@ -45,7 +45,7 @@ client.on("message", async message => {
       },
       {
         name: "Links",
-        value: "[Github](http://google.com) and [Github](http://google.com)"
+        value: "[Github](https://github.com/zippy4/warframe-discord-bot)"
       },
       {
         name: "API",
@@ -60,6 +60,13 @@ client.on("message", async message => {
 });
   }
 
+    if(command === "stat") {
+        message.channel.send({embed: {
+            color: 16716947,
+            description: `I am serving ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`
+        }}); 
+    }
+    
  if(command === "void") {
   const api = "https://api.warframestat.us/pc"
   const snekfetch = require("snekfetch")
@@ -74,8 +81,8 @@ client.on("message", async message => {
     title: "Location:",
     description: voidTrader.location,
     fields: [{
-        name: "Time until departure",
-        value: voidTrader.endString
+        name: "Time until arrival",
+        value: voidTrader.startString
       }
     ],
   }
@@ -86,8 +93,8 @@ client.on("message", async message => {
   if(command === "time") {
   const api = "https://api.warframestat.us/pc/cetusCycle"
   const snekfetch = require("snekfetch")
-    snekfetch.get(api).then(r => {
-      var body = r.body.isDay;
+	  snekfetch.get(api).then(r => {
+			var body = r.body.isDay;
       var shortString = r.body.shortString
     if (body == true) {
       message.channel.send({embed: {
@@ -141,7 +148,7 @@ client.on("message", async message => {
     }
   }
 });
-    });
+	  });
   }
 
   if(command === "alert") {

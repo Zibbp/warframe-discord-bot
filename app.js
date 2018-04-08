@@ -1,4 +1,3 @@
-
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config.json");
@@ -72,26 +71,13 @@ client.on("message", async message => {
       name: voidTrader.character,
       icon_url: client.user.avatarURL
     },
-    title: "This is an embed",
-    description: "This is a test embed to showcase what they look like and what they can do.",
+    title: "Location:",
+    description: voidTrader.location,
     fields: [{
-        name: "Fields",
-        value: "They can have different fields with small headlines."
-      },
-      {
-        name: "Masked links",
-        value: "You can put [masked links](http://google.com) inside of rich embeds."
-      },
-      {
-        name: "Markdown",
-        value: "You can put all the *usual* **__Markdown__** inside of them."
+        name: "Time until departure",
+        value: voidTrader.endString
       }
     ],
-    timestamp: new Date(),
-    footer: {
-      icon_url: client.user.avatarURL,
-      text: "© Example"
-    }
   }
 });
     });
@@ -100,8 +86,8 @@ client.on("message", async message => {
   if(command === "time") {
   const api = "https://api.warframestat.us/pc/cetusCycle"
   const snekfetch = require("snekfetch")
-	  snekfetch.get(api).then(r => {
-			var body = r.body.isDay;
+    snekfetch.get(api).then(r => {
+      var body = r.body.isDay;
       var shortString = r.body.shortString
     if (body == true) {
       message.channel.send({embed: {
@@ -155,7 +141,7 @@ client.on("message", async message => {
     }
   }
 });
-	  });
+    });
   }
 
   if(command === "alert") {

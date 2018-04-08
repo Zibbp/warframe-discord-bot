@@ -1,6 +1,8 @@
 # Warframe Discord Bot
 > A discord bot that provides real time information about warframe.
 
+[Bot invite link](https://discordapp.com/oauth2/authorize?client_id=432276575044632586&scope=bot)
+
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg)](https://forthebadge.com)
 

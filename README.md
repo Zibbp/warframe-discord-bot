@@ -13,6 +13,12 @@
 
 ## Commands
 
++help
+
+```
+You will receive a DM of all current commands
+```
+
 +time
 
 ```

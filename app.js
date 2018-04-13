@@ -66,6 +66,13 @@ client.on("message", async message => {
             description: `I am serving ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`
         }}); 
     }
+
+    if(command === "code") {
+        message.channel.send({embed: {
+            color: 16729344,
+            description: `Check out the code over at [Github](https://github.com/zippy4/warframe-discord-bot)`
+        }}); 
+    }
     
  if(command === "void") {
   const api = "https://api.warframestat.us/pc"
@@ -310,16 +317,12 @@ message.channel.send({embed: {
   }
 
   if(command === "purge") {
-    // This command removes all messages from all users in the channel, up to 100.
-    
-    // get the delete count, as an actual number.
+
     const deleteCount = parseInt(args[0], 10);
     
-    // Ooooh nice, combined conditions. <3
     if(!deleteCount || deleteCount < 2 || deleteCount > 100)
       return message.reply("Please provide a number between 2 and 100 for the number of messages to delete");
     
-    // So we get our messages, and delete them. Simple enough, right?
     const fetched = await message.channel.fetchMessages({count: deleteCount});
     message.channel.bulkDelete(fetched)
       .catch(error => message.reply(`Couldn't delete messages because of: ${error}`));

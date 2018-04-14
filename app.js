@@ -37,7 +37,7 @@ client.on("message", async message => {
     description: "Help and information about the warframe bot.",
     fields: [{
         name: "Commands",
-        value: "Currently we only have +time, +alert, and +void"
+        value: "Currently we only have +time, +alert, +void, +code, and +farm"
       },
       {
         name: "Development",
@@ -52,7 +52,7 @@ client.on("message", async message => {
         value: "We use [warframestat.us](https://docs.warframestat.us)"
       }
     ],
-    timestamp: new Date(),
+    timestamp: new Date(), 
     footer: {
       icon_url: client.user.avatarURL,
     }
@@ -72,6 +72,11 @@ client.on("message", async message => {
             color: 16729344,
             description: `Check out the code over at [Github](https://github.com/zippy4/warframe-discord-bot)`
         }}); 
+    }
+
+    if(command === "farm") {
+        message.channel.send(`https://youtu.be/60Lci-OcpFw`
+          );
     }
     
  if(command === "void") {

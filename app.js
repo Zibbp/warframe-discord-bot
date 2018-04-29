@@ -9,6 +9,8 @@ function callWarframeAPI(noun) {
   return snekfetch.get(warframe_api + noun);
 }
 
+const MAX_ALERTS = 5;
+
 client.on("ready", () => {
   
   console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
@@ -169,157 +171,40 @@ client.on("message", async message => {
 
   if(command === "alert") {
     callWarframeAPI("alerts").then(r => {
-      var alert1 = r.body[0];
-      var alert2 = r.body[1];
-      var alert3 = r.body[2];
-      var alert4 = r.body[3];
-      var alert5 = r.body[4];
-      message.channel.send({embed: {
-    color: 3447003,
-    author: {
-      name: "Alert #1",
-      icon_url: alert1.mission.reward.thumbnail
-    },
-    title: `Type: ${alert1.mission.type}`,
-    description: alert1.mission.node,
-    fields: [{
-        name: "Loot",
-        value: alert1.mission.reward.asString
-      },
-      {
-        name: "Min Enemy Level",
-        value: alert1.mission.minEnemyLevel
-      },
-      {
-        name: "Max Enemy Level",
-        value: alert1.mission.maxEnemyLevel
+      let alerts = r.body;
+      
+      for (let i = 0; i < alerts.length && i < MAX_ALERTS; i++) {
+        let alert = alerts[i];
+
+        message.channel.send({embed: {
+          color: 3447003,
+          author: {
+            name: `Alert #${i+1}`,
+            icon_url: alert.mission.reward.thumbnail
+          },
+          title: `Type: ${alert.mission.type}`,
+          description: alert.mission.node,
+          fields: [
+            {
+              name: "Loot",
+              value: alert.mission.reward.asString
+            },
+            {
+              name: "Min Enemy Level",
+              value: alert.mission.minEnemyLevel
+            },
+            {
+              name: "Max Enemy Level",
+              value: alert.mission.maxEnemyLevel
+            }
+          ],
+          footer: {
+            icon_url: alert.mission.reward.thumbnail,
+            text: `Timeleft: ${alert.eta}`
+          }
+        }});
       }
-    ],
-    footer: {
-      icon_url: alert1.mission.reward.thumbnail,
-      text: `Timeleft: ${alert1.eta}`
-    }
-  }
-});
-
-
-
-message.channel.send({embed: {
-    color: 3447003,
-    author: {
-      name: "Alert #2",
-      icon_url: alert2.mission.reward.thumbnail
-    },
-    title: `Type: ${alert2.mission.type}`,
-    description: alert2.mission.node,
-    fields: [{
-        name: "Loot",
-        value: alert2.mission.reward.asString
-      },
-      {
-        name: "Min Enemy Level",
-        value: alert2.mission.minEnemyLevel
-      },
-      {
-        name: "Max Enemy Level",
-        value: alert2.mission.maxEnemyLevel
-      }
-    ],
-    footer: {
-      icon_url: alert2.mission.reward.thumbnail,
-      text: `Timeleft: ${alert2.eta}`
-    }
-  }
-});
-
-
-message.channel.send({embed: {
-    color: 3447003,
-    author: {
-      name: "Alert #3",
-      icon_url: alert3.mission.reward.thumbnail
-    },
-    title: `Type: ${alert3.mission.type}`,
-    description: alert3.mission.node,
-    fields: [{
-        name: "Loot",
-        value: alert3.mission.reward.asString
-      },
-      {
-        name: "Min Enemy Level",
-        value: alert3.mission.minEnemyLevel
-      },
-      {
-        name: "Max Enemy Level",
-        value: alert3.mission.maxEnemyLevel
-      }
-    ],
-    footer: {
-      icon_url: alert3.mission.reward.thumbnail,
-      text: `Timeleft: ${alert3.eta}`
-    }
-  }
-});
-
-
-message.channel.send({embed: {
-    color: 3447003,
-    author: {
-      name: "Alert #4",
-      icon_url: alert4.mission.reward.thumbnail
-    },
-    title: `Type: ${alert4.mission.type}`,
-    description: alert4.mission.node,
-    fields: [{
-        name: "Loot",
-        value: alert4.mission.reward.asString
-      },
-      {
-        name: "Min Enemy Level",
-        value: alert4.mission.minEnemyLevel
-      },
-      {
-        name: "Max Enemy Level",
-        value: alert4.mission.maxEnemyLevel
-      }
-    ],
-    footer: {
-      icon_url: alert4.mission.reward.thumbnail,
-      text: `Timeleft: ${alert4.eta}`
-    }
-  }
-});
-
-
-message.channel.send({embed: {
-    color: 3447003,
-    author: {
-      name: "Alert #5",
-      icon_url: alert5.mission.reward.thumbnail
-    },
-    title: `Type: ${alert5.mission.type}`,
-    description: alert5.mission.node,
-    fields: [{
-        name: "Loot",
-        value: alert5.mission.reward.asString
-      },
-      {
-        name: "Min Enemy Level",
-        value: alert5.mission.minEnemyLevel
-      },
-      {
-        name: "Max Enemy Level",
-        value: alert5.mission.maxEnemyLevel
-      }
-    ],
-    footer: {
-      icon_url: alert5.mission.reward.thumbnail,
-      text: `Timeleft: ${alert5.eta}`
-    }
-  }
-});
-
-});
+    });
 
   }
 

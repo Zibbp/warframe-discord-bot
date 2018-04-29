@@ -90,8 +90,8 @@ client.on("message", async message => {
     }
     
  if(command === "void") {
-    callWarframeAPI("").then(r => {
-      var voidTrader = r.body.voidTrader
+    callWarframeAPI("voidTrader").then(r => {
+      var voidTrader = r.body;
       message.channel.send({embed: {
     color: 3447003,
     author: {

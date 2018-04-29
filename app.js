@@ -1,6 +1,14 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config.json");
+
+const warframe_api = "https://api.warframestat.us/pc/";
+const snekfetch = require("snekfetch");
+
+function callWarframeAPI(noun) {
+  return snekfetch.get(warframe_api + noun);
+}
+
 client.on("ready", () => {
   
   console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
@@ -80,9 +88,7 @@ client.on("message", async message => {
     }
     
  if(command === "void") {
-  const api = "https://api.warframestat.us/pc"
-  const snekfetch = require("snekfetch")
-    snekfetch.get(api).then(r => {
+    callWarframeAPI("").then(r => {
       var voidTrader = r.body.voidTrader
       message.channel.send({embed: {
     color: 3447003,
@@ -103,9 +109,7 @@ client.on("message", async message => {
   }
 
   if(command === "time") {
-  const api = "https://api.warframestat.us/pc/cetusCycle"
-  const snekfetch = require("snekfetch")
-	  snekfetch.get(api).then(r => {
+	  callWarframeAPI("cetusCycle").then(r => {
 			var body = r.body.isDay;
       var shortString = r.body.shortString
     if (body == true) {
@@ -164,9 +168,7 @@ client.on("message", async message => {
   }
 
   if(command === "alert") {
-  const api = "https://api.warframestat.us/pc/alerts"
-  const snekfetch = require("snekfetch")
-    snekfetch.get(api).then(r => {
+    callWarframeAPI("alerts").then(r => {
       var alert1 = r.body[0];
       var alert2 = r.body[1];
       var alert3 = r.body[2];

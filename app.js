@@ -14,17 +14,17 @@ const MAX_ALERTS = 5;
 client.on("ready", () => {
   
   console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
-  client.user.setActivity(`+help | In Dev`);
+  client.user.setActivity(`${config.prefix}help | In Dev`);
 });
 
 client.on("guildCreate", guild => {
   console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
-  client.user.setActivity(`+help | In Dev`);
+  client.user.setActivity(`${config.prefix}help | In Dev`);
 });
 
 client.on("guildDelete", guild => {
   console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
-  client.user.setActivity(`+help | In Dev`);
+  client.user.setActivity(`${config.prefix}help | In Dev`);
 });
 
 client.on("message", async message => {
@@ -47,7 +47,7 @@ client.on("message", async message => {
     description: "Help and information about the warframe bot.",
     fields: [{
         name: "Commands",
-        value: "Currently we only have +time, +alert, +void, +code, and +farm"
+        value: `Currently we only have ${config.prefix}time, ${config.prefix}alert, ${config.prefix}void, ${config.prefix}code, and ${config.prefix}farm`
       },
       {
         name: "Development",

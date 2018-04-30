@@ -53,80 +53,78 @@ client.on("message", async message => {
 
   if(command === "help") {
     message.author.send({embed: {
-    color: 3447003,
-    author: {
-      name: client.user.username,
-      icon_url: client.user.avatarURL
-    },
-    title: "Help command",
-    description: "Help and information about the warframe bot.",
-    fields: [{
-        name: "Commands",
-        value: `Currently we only have ${config.prefix}time, ${config.prefix}alert, ${config.prefix}void, ${config.prefix}code, and ${config.prefix}farm`
+      color: 3447003,
+      author: {
+        name: client.user.username,
+        icon_url: client.user.avatarURL
       },
-      {
-        name: "Development",
-        value: "We are constantly adding stuff, view the reddit or github for updates."
-      },
-      {
-        name: "Links",
-        value: "[Github](https://github.com/zippy4/warframe-discord-bot)"
-      },
-      {
-        name: "API",
-        value: "We use [warframestat.us](https://docs.warframestat.us)"
+      title: "Help command",
+      description: "Help and information about the warframe bot.",
+      fields: [
+        {
+          name: "Commands",
+          value: `Currently we only have ${config.prefix}time, ${config.prefix}alert, ${config.prefix}void, ${config.prefix}code, and ${config.prefix}farm`
+        },
+        {
+          name: "Development",
+          value: "We are constantly adding stuff, view the reddit or github for updates."
+        },
+        {
+          name: "Links",
+          value: "[Github](https://github.com/zippy4/warframe-discord-bot)"
+        },
+        {
+          name: "API",
+          value: "We use [warframestat.us](https://docs.warframestat.us)"
+        }
+      ],
+      timestamp: new Date(), 
+      footer: {
+        icon_url: client.user.avatarURL,
       }
-    ],
-    timestamp: new Date(), 
-    footer: {
-      icon_url: client.user.avatarURL,
-    }
-  }
-});
+    }});
   }
 
-    if(command === "stat") {
-        message.channel.send({embed: {
-            color: 16716947,
-            description: `I am serving ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`
-        }}); 
-    }
+  if(command === "stat") {
+    message.channel.send({embed: {
+      color: 16716947,
+      description: `I am serving ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`
+    }}); 
+  }
 
-    if(command === "code") {
-        message.channel.send({embed: {
-            color: 16729344,
-            description: `Check out the code over at [Github](https://github.com/zippy4/warframe-discord-bot)`
-        }}); 
-    }
+  if(command === "code") {
+    message.channel.send({embed: {
+      color: 16729344,
+      description: `Check out the code over at [Github](https://github.com/zippy4/warframe-discord-bot)`
+    }}); 
+  }
 
-    if(command === "farm") {
-        message.channel.send(`https://youtu.be/60Lci-OcpFw`
-          );
-    }
+  if(command === "farm") {
+      message.channel.send(`https://youtu.be/60Lci-OcpFw`);
+  }
     
- if(command === "void") {
+  if(command === "void") {
     callWarframeAPI("voidTrader").then(r => {
       var voidTrader = r.body;
       message.channel.send({embed: {
-    color: 3447003,
-    author: {
-      name: voidTrader.character,
-      icon_url: client.user.avatarURL
-    },
-    title: "Location:",
-    description: voidTrader.location,
-    fields: [{
-        name: "Time until arrival",
-        value: voidTrader.startString
-      }
-    ],
-  }
-});
+        color: 3447003,
+        author: {
+          name: voidTrader.character,
+          icon_url: client.user.avatarURL
+        },
+        title: "Location:",
+        description: voidTrader.location,
+        fields: [{
+            name: "Time until arrival",
+            value: voidTrader.startString
+          }
+        ],
+      }});
     });
   }
 
   if(command === "time") {
-	  callWarframeAPI("cetusCycle").then(r => {
+      callWarframeAPI("cetusCycle").then(r => {
       var isDay = r.body.isDay;
       var timeTillChange = r.body.shortString
       
@@ -222,4 +220,3 @@ client.on("message", async message => {
 });
 
 client.login(config.token);
-           

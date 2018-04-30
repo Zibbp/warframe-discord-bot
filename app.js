@@ -1,13 +1,15 @@
+const Discord = require("discord.js");
+const snekfetch = require("snekfetch");
 const fs = require('fs');
+
+const warframe_api = "https://api.warframestat.us/pc/";
+const MAX_ALERTS = 5;
+
 if(!fs.existsSync("./config.json")) {
   console.log("config.json does not exists, bot will not run");
   return 1;
 }
-
-const Discord = require("discord.js");
-const client = new Discord.Client();
 const config = require("./config.json");
-
 if(!config.token) {
   console.log("config.json does not contain a bot token (/token in json structure)");
   return 1;
@@ -17,14 +19,12 @@ if(!config.prefix) {
   return 1;
 }
 
-const warframe_api = "https://api.warframestat.us/pc/";
-const snekfetch = require("snekfetch");
+const client = new Discord.Client();
 
 function callWarframeAPI(noun) {
   return snekfetch.get(warframe_api + noun);
 }
 
-const MAX_ALERTS = 5;
 
 client.on("ready", () => {
   

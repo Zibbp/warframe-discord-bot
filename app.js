@@ -7,16 +7,16 @@ const warframe_api = "https://api.warframestat.us/pc/";
 const MAX_ALERTS = 5;
 
 if(!fs.existsSync("./config.json")) {
-  console.log("config.json does not exists, bot will not run");
+  console.error("config.json does not exists, bot will not run");
   return 1;
 }
 const config = require("./config.json");
 if(!config.token) {
-  console.log("config.json does not contain a bot token (/token in json structure)");
+  console.error("config.json does not contain a bot token (/token in json structure)");
   return 1;
 }
 if(!config.prefix) {
-  console.log("config.json does not contain a command prefix (/prefix in json structure)");
+  console.error("config.json does not contain a command prefix (/prefix in json structure)");
   return 1;
 }
 
@@ -25,12 +25,12 @@ const client = new Discord.Client();
 function callWarframeAPI(noun) {
   return snekfetch.get(warframe_api + noun)
          .catch(reason => {
-           console.log(`${noun} failed with exception: ${reason}`);
+           console.error(`${noun} failed with exception: ${reason}`);
          });
 }
 
 client.on("ready", () => {
-  console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
+  console.info(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
   client.user.setActivity(`${config.prefix}help | In Dev`);
 });
 
@@ -193,7 +193,6 @@ client.on("message", async message => {
   }
 
   if(command === "purge") {
-
     const deleteCount = parseInt(args[0], 10);
     
     if(!deleteCount || deleteCount < 2 || deleteCount > 100)
@@ -205,4 +204,6 @@ client.on("message", async message => {
   }
 });
 
-client.login(config.token);
+client.login(config.token).catch((reason) => {
+  console.error(`Unable to login to discord: ${reason}`);
+});

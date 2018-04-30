@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const snekfetch = require("snekfetch");
 const fs = require('fs');
+const numeral = require('numeral');
 
 const warframe_api = "https://api.warframestat.us/pc/";
 const MAX_ALERTS = 5;
@@ -28,7 +29,6 @@ function callWarframeAPI(noun) {
          });
 }
 
-
 client.on("ready", () => {
   console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
   client.user.setActivity(`${config.prefix}help | In Dev`);
@@ -43,9 +43,7 @@ client.on("guildDelete", guild => {
 });
 
 client.on("message", async message => {
-
   if(message.author.bot) return;
-
   if(message.content[0] !== config.prefix) return;
 
   const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
@@ -176,28 +174,16 @@ client.on("message", async message => {
 
         message.channel.send({embed: {
           color: 3447003,
-          author: {
-            name: `Alert #${i+1}`,
-            icon_url: alert.mission.reward.thumbnail
-          },
-          title: `Type: ${alert.mission.type}`,
-          description: alert.mission.node,
+          thumbnail: {url: alert.mission.reward.thumbnail},
+          title: `${alert.mission.type} - ${alert.mission.node}`,
+          description: alert.mission.reward.items.concat(numeral(alert.mission.reward.credits).format('0,0') + "cr").join(" + "),
           fields: [
             {
-              name: "Loot",
-              value: alert.mission.reward.asString
-            },
-            {
-              name: "Min Enemy Level",
-              value: alert.mission.minEnemyLevel
-            },
-            {
-              name: "Max Enemy Level",
-              value: alert.mission.maxEnemyLevel
+              name: "Levels",
+              value: `${alert.mission.minEnemyLevel}-${alert.mission.maxEnemyLevel}`
             }
           ],
           footer: {
-            icon_url: alert.mission.reward.thumbnail,
             text: `Timeleft: ${alert.eta}`
           }
         }});

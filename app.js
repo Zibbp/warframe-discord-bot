@@ -52,10 +52,6 @@ client.on("message", async message => {
   if(command === "help") {
     message.author.send({embed: {
       color: 3447003,
-      author: {
-        name: client.user.username,
-        icon_url: client.user.avatarURL
-      },
       title: "Help command",
       description: "Help and information about the warframe bot.",
       fields: [
@@ -76,7 +72,6 @@ client.on("message", async message => {
           value: "We use [warframestat.us](https://docs.warframestat.us)"
         }
       ],
-      timestamp: new Date(), 
       footer: {
         icon_url: client.user.avatarURL,
       }
@@ -106,12 +101,7 @@ client.on("message", async message => {
       var voidTrader = r.body;
       message.channel.send({embed: {
         color: 3447003,
-        author: {
-          name: voidTrader.character,
-          icon_url: client.user.avatarURL
-        },
-        title: "Location:",
-        description: voidTrader.location,
+        title: `${voidTrader.character} - ${voidTrader.location}`,
         fields: [{
             name: "Time until arrival",
             value: voidTrader.startString
@@ -139,28 +129,14 @@ client.on("message", async message => {
     
       message.channel.send({embed: {
         color: color,
-        author: {
-          name: client.user.username,
-          icon_url: client.user.avatarURL
-        },
-        title: "Time for",
-        url: "",
-        description: "Plains of Eidolon",
+        title: "What time is it in Cetus?",
+        description: flavorText,
         fields: [
-          {
-            name: "What time is it?",
-            value: flavorText
-          },
           {
             name: timeUntil,
             value: timeTillChange
           }
-        ],
-        timestamp: new Date(),
-        footer: {
-          icon_url: client.user.avatarURL,
-          text: "Warframe Bot | Zippy"
-        }
+        ]
       }});
     });
   }

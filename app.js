@@ -20,6 +20,10 @@ if(!config.prefix) {
   return 1;
 }
 
+function formatNumber(number) {
+  return numeral(number).format('0,0');
+}
+
 const client = new Discord.Client();
 
 function callWarframeAPI(noun) {
@@ -29,9 +33,61 @@ function callWarframeAPI(noun) {
          });
 }
 
+function alertEmbed(alert) {
+  var items = alert.mission.reward.items;
+  items = items.concat(alert.mission.reward.countedItems.map(x => `${formatNumber(x.count)} ${x.type}`));
+  items.push(formatNumber(alert.mission.reward.credits) + "cr");
+  
+  return {embed: {
+    color: 3447003,
+    thumbnail: {url: alert.mission.reward.thumbnail},
+    title: `${alert.mission.type} - ${alert.mission.node}`,
+    description: items.join(" + "),
+    fields: [
+      {
+        name: "Levels",
+        value: `${alert.mission.minEnemyLevel}-${alert.mission.maxEnemyLevel}`
+      }
+    ],
+    footer: {
+      text: `Timeleft: ${alert.eta}`
+    }
+  }};
+}
+
+let subscribed_users = [];
+
+function startMonitoring() {
+  client.setInterval(() => {
+    console.log("---CHECKING---");
+    
+    callWarframeAPI("alerts").then((r) => {
+      let alerts = r.body;
+      
+      for(let i=0; i<alerts.length; i++) {
+        let alert = alerts[i];
+        if(alert.mission.reward.items.indexOf("Orokin Catalyst") === -1 &&
+           alert.mission.reward.items.indexOf("Orokin Reactor") === -1 &&
+           alert.mission.reward.items.indexOf("Forma") === -1) continue;
+        let alert_embed = alertEmbed(alert);
+        
+        let users_it = subscribed_users.slice(); //de-alias
+        for(let j=0; j<users_it.length; j++) {
+          let user = users_it[j];
+          
+          user.send(alert_embed);
+        }
+        
+        console.log(alert.mission.reward.itemString);
+      }
+    });
+  }, 1000*60*30);
+}
+
 client.on("ready", () => {
   console.info(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
   client.user.setActivity(`${config.prefix}help | In Dev`);
+  startMonitoring();
 });
 
 client.on("guildCreate", guild => {
@@ -148,24 +204,38 @@ client.on("message", async message => {
       for (let i = 0; i < alerts.length && i < MAX_ALERTS; i++) {
         let alert = alerts[i];
 
-        message.channel.send({embed: {
-          color: 3447003,
-          thumbnail: {url: alert.mission.reward.thumbnail},
-          title: `${alert.mission.type} - ${alert.mission.node}`,
-          description: alert.mission.reward.items.concat(numeral(alert.mission.reward.credits).format('0,0') + "cr").join(" + "),
-          fields: [
-            {
-              name: "Levels",
-              value: `${alert.mission.minEnemyLevel}-${alert.mission.maxEnemyLevel}`
-            }
-          ],
-          footer: {
-            text: `Timeleft: ${alert.eta}`
-          }
-        }});
+        message.channel.send(alertEmbed(alert));
       }
     });
-
+  }
+  
+  if(command === "report") {
+    var index = subscribed_users.indexOf(message.channel);
+    if(index === -1) {
+      subscribed_users.push(message.channel);
+      if(message.channel.name)
+        console.log(`Channel ${message.channel.name} added to report list`);
+      else
+        console.log(`User ${message.author.username} added to report list`);
+      message.channel.send("Added you!");
+    }
+    else {
+      message.channel.send("You are already added.");
+    }
+  }
+  if(command === "unreport") {
+    var index = subscribed_users.indexOf(message.channel);
+    if (index > -1) {
+      subscribed_users.splice(index, 1);
+      if(message.channel.name)
+        console.log(`Channel ${message.channel.name} removed from report list`);
+      else
+        console.log(`User ${message.author.username} removed from report list`);
+      message.channel.send("Removed you!");
+    }
+    else {
+      message.channel.send("You are not on the reporting list.");
+    }
   }
 
   if(command === "purge") {

@@ -127,61 +127,46 @@ client.on("message", async message => {
 
   if(command === "time") {
 	  callWarframeAPI("cetusCycle").then(r => {
-			var body = r.body.isDay;
-      var shortString = r.body.shortString
-    if (body == true) {
-      message.channel.send({embed: {
-    color: 16776960,
-    author: {
-      name: client.user.username,
-      icon_url: client.user.avatarURL
-    },
-    title: "Time for",
-    url: "",
-    description: "Plains of Eidolon",
-    fields: [{
-        name: "What time is it?",
-        value: ":sunny: It is currently day time! Happy fishing! :fish:"
-      },
-      {
-        name: "Time until night:",
-        value: shortString
+      var isDay = r.body.isDay;
+      var timeTillChange = r.body.shortString
+      
+      // If night
+      var color = 0;
+      var flavorText = ":first_quarter_moon: It is currently night time, don't go out! :no_entry_sign:";
+      var timeUntil = "Time until day:";
+      // If day
+      if (isDay == true) {
+        color = 16776960;
+        var flavorText = ":sunny: It is currently day time! Happy fishing! :fish:";
+        var timeUntil = "Time until night:";
       }
-    ],
-    timestamp: new Date(),
-    footer: {
-      icon_url: client.user.avatarURL,
-      text: "Warframe Bot | Zippy"
-    }
-  }
-});
-    }else
+    
       message.channel.send({embed: {
-    color: 0,
-    author: {
-      name: client.user.username,
-      icon_url: client.user.avatarURL
-    },
-    title: "Time for",
-    url: "",
-    description: "Plains of Eidolon",
-    fields: [{
-        name: "What time is it?",
-        value: ":first_quarter_moon: It is currently night time, don't go out! :no_entry_sign:"
-      },
-      {
-        name: "Time until day:",
-        value: shortString
-      }
-    ],
-    timestamp: new Date(),
-    footer: {
-      icon_url: client.user.avatarURL,
-      text: "Warframe Bot | Zippy"
-    }
-  }
-});
-	  });
+        color: color,
+        author: {
+          name: client.user.username,
+          icon_url: client.user.avatarURL
+        },
+        title: "Time for",
+        url: "",
+        description: "Plains of Eidolon",
+        fields: [
+          {
+            name: "What time is it?",
+            value: flavorText
+          },
+          {
+            name: timeUntil,
+            value: timeTillChange
+          }
+        ],
+        timestamp: new Date(),
+        footer: {
+          icon_url: client.user.avatarURL,
+          text: "Warframe Bot | Zippy"
+        }
+      }});
+    });
   }
 
   if(command === "alert") {

@@ -49,7 +49,7 @@ client.on("message", async message => {
 
   if(message.author.bot) return;
 
-  if(message.content.indexOf(config.prefix) !== 0) return;
+  if(message.content[0] !== config.prefix) return;
 
   const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();

@@ -22,7 +22,10 @@ if(!config.prefix) {
 const client = new Discord.Client();
 
 function callWarframeAPI(noun) {
-  return snekfetch.get(warframe_api + noun);
+  return snekfetch.get(warframe_api + noun)
+         .catch(reason => {
+           console.log(`${noun} failed with exception: ${reason}`);
+         });
 }
 
 

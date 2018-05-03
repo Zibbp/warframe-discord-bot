@@ -31,6 +31,24 @@ Shows the current time for Plains of Eidolon and a countdown to when it turns ni
 Shows all the current alerts, locations, gamemodes, loot rewards, enemy levels, and time left.
 ```
 
++void
+
+```
+Shows the current location and time of the void trader.
+```
+
++code
+
+```
+Links to this repo.
+```
+
++farm
+
+```
+Links to a helpful video about farming in warframe.
+```
+
 More soon
 
 ```
